@@ -1,3 +1,5 @@
+const Task = require('../../models/taskModel');
+
 const getAllTasks = (req, res) => {
     res.status(200).json({
         message: 'Get all tasks'
@@ -10,10 +12,18 @@ const getTaskById = (req, res) => {
         message: `Get task with ID: ${id}`
     });
 }
-const createTask = (req, res) => {
-    res.status(201).json({
-        message: 'Create a new task'
-    });
+const createTask = async (req, res) => {
+    try {
+        const task = await Task.create(req.body);
+        res.status(201).json({ task });
+    } catch (error) {
+        res.status(400).json(
+            {
+                massege: "Failed to create task",
+                error: error,
+            }
+        )
+    }
 }
 
 const updateTask = (req, res) => {
