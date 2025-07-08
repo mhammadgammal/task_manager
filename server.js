@@ -1,4 +1,7 @@
 const express = require('express');
+
+// connect to db
+require('./config/db.config');
 const app = express();
 
 app.use(express.json()); // Middleware to parse JSON bodies

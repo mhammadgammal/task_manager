@@ -9,6 +9,9 @@
   "author": "Mohamed Gamal",
   "license": "ISC",
   "dependencies": {
-    "mongose": "^0.0.2-security"
+    "cors": "^2.8.5",
+    "dotenv": "^17.1.0",
+    "express": "^5.1.0",
+    "mongoose": "^8.16.2"
   }
 }
