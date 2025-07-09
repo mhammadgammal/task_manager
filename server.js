@@ -1,6 +1,8 @@
 const express = require('express');
 const Cors = require('cors');
 const tasksRoute = require('./routes/tasksRoute');
+const errorHandlerMiddleware = require('./middleware/errorHandlerMiddleware');
+const notFoundMiddleware = require('./middleware/notFoundMiddleware');
 // connect to db
 require('./config/db.config');
 const app = express();
@@ -17,7 +19,9 @@ app.get('/', (req, res) => {
     res.send('public/index.html');
 });
 
-const PORT = 3000;
+app.use(notFoundMiddleware); // Middleware for handling 404 errors
+app.use(errorHandlerMiddleware)
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });

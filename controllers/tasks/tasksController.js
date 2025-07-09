@@ -1,4 +1,5 @@
 const Task = require('../../models/taskModel');
+const NotFoundException = require('../../exception/notFoundExeption');
 
 const getAllTasks = async (_, res) => {
     try {
@@ -18,16 +19,19 @@ const getTaskById = async (req, res) => {
         const { id } = req.params;
         const task = await Task.findById(id)
         if (!task) {
-            throw new Error(`No task found with ID: ${id}`);
+            console.error(`No task found with ID: ${id}`);
+
+            throw new NotFoundException(`No task found with ID: ${id}`);
         }
         res.status(200).json({
             status: 'success',
             task: task
         });
     } catch (error) {
-        res.status(404).json({
-            message: error.message,
-        });
+        const taskErr = new Error(error);
+        taskErr.status = 500;
+
+        throw taskErr;
     }
 }
 
@@ -48,11 +52,11 @@ const createTask = async (req, res) => {
     }
 }
 
-const updateTask = async(req, res) => {
+const updateTask = async (req, res) => {
     try {
         const { id } = req.params;
         console.log(`Updating task with ID: ${id}`, req.body);
-        
+
         const task = await Task.findByIdAndUpdate({ _id: id }, req.body,
             {
                 new: true,
