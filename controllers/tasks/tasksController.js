@@ -10,8 +10,6 @@ const getTaskById = asyncWrapper(async (req, res) => {
     const { id } = req.params;
     const task = await Task.findById(id)
     if (!task) {
-        console.error(`No task found with ID: ${id}`);
-
         throw new NotFoundException(`No task found with ID: ${id}`);
     }
     res.status(200).json({
@@ -40,7 +38,7 @@ const updateTask = asyncWrapper(async (req, res) => {
         })
 
     if (!task) {
-        throw new Error(`No task found with ID: ${id}`);
+        throw new NotFoundException(`No task found with ID: ${id}`);
     }
 
     res.status(200).json({
@@ -53,7 +51,7 @@ const deleteTask = asyncWrapper(async (req, res) => {
     const { id } = req.params;
     const task = await Task.findByIdAndDelete(id);
     if (!task) {
-        throw new Error(`No task found with ID: ${id}`);
+        throw new NotFoundException(`No task found with ID: ${id}`);
     }
     res.status(200).json({
         status: 'success',
