@@ -1,10 +1,12 @@
 const NotFoundException = require('../exception/notFoundExeption');
 const errorHandlerMiddleware = (err, req, res, next) => {
+    console.error(`Error:\n ${err.message}\n Stack: ${err.stack}`);
+    
     if (err instanceof NotFoundException) {
         res.status(404).json(
             {
                 status: 'error',
-                message: err.message,
+                message: err.message
             }
         );
     } else {
