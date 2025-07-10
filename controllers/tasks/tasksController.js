@@ -1,11 +1,12 @@
 const Task = require('../../models/taskModel');
 const NotFoundException = require('../../exception/notFoundExeption');
+const asyncWrapper = require('../../helper/asyncWrapper');
 
 const getAllTasks = async (_, res) => {
     res.status(200).json({ status: 'success', tasks });
 }
 
-const getTaskById = async (req, res) => {
+const getTaskById = asyncWrapper(async (req, res) => {
     const { id } = req.params;
     const task = await Task.findById(id)
     if (!task) {
@@ -18,17 +19,17 @@ const getTaskById = async (req, res) => {
         task: task
     });
 
-}
+});
 
-const createTask = async (req, res) => {
+const createTask = asyncWrapper(async (req, res) => {
     const task = await Task.create(req.body);
     res.status(201).json({
         status: 'success',
         task
     });
-}
+})
 
-const updateTask = async (req, res) => {
+const updateTask = asyncWrapper(async (req, res) => {
     const { id } = req.params;
     console.log(`Updating task with ID: ${id}`, req.body);
 
@@ -46,9 +47,9 @@ const updateTask = async (req, res) => {
         status: 'success',
         task
     });
-}
+})
 
-const deleteTask = async (req, res) => {
+const deleteTask = asyncWrapper(async (req, res) => {
     const { id } = req.params;
     const task = await Task.findByIdAndDelete(id);
     if (!task) {
@@ -58,7 +59,7 @@ const deleteTask = async (req, res) => {
         status: 'success',
         message: 'Task deleted successfully'
     });
-}
+})
 
 module.exports = {
     getAllTasks,
