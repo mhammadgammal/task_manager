@@ -7,8 +7,15 @@ const errorHandlerMiddleware = (err, req, res, next) => {
                 message: err.message,
             }
         );
+    } else {
+        res.status(500).json(
+            {
+                status: 'error',
+                message: 'Internal Server Error',
+                error: err.message || 'An unexpected error occurred'
+            }
+        )
     }
-    next(err);
 }
 
 module.exports = errorHandlerMiddleware;
