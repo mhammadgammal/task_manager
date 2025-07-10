@@ -2,16 +2,7 @@ const Task = require('../../models/taskModel');
 const NotFoundException = require('../../exception/notFoundExeption');
 
 const getAllTasks = async (_, res) => {
-    try {
-        const tasks = await Task.find();
-
-        res.status(200).json({ status: 'success', tasks });
-    } catch (error) {
-        res.status(500).json({
-            message: "Failed to fetch tasks",
-            error: error.message
-        });
-    }
+    res.status(200).json({ status: 'success', tasks });
 }
 
 const getTaskById = async (req, res) => {
@@ -30,65 +21,43 @@ const getTaskById = async (req, res) => {
 }
 
 const createTask = async (req, res) => {
-    try {
-        const task = await Task.create(req.body);
-        res.status(201).json({
-            status: 'success',
-            task
-        });
-    } catch (error) {
-        res.status(400).json(
-            {
-                massege: "Failed to create task",
-                error: error,
-            }
-        )
-    }
+    const task = await Task.create(req.body);
+    res.status(201).json({
+        status: 'success',
+        task
+    });
 }
 
 const updateTask = async (req, res) => {
-    try {
-        const { id } = req.params;
-        console.log(`Updating task with ID: ${id}`, req.body);
+    const { id } = req.params;
+    console.log(`Updating task with ID: ${id}`, req.body);
 
-        const task = await Task.findByIdAndUpdate({ _id: id }, req.body,
-            {
-                new: true,
-                runValidators: true
-            })
+    const task = await Task.findByIdAndUpdate({ _id: id }, req.body,
+        {
+            new: true,
+            runValidators: true
+        })
 
-        if (!task) {
-            throw new Error(`No task found with ID: ${id}`);
-        }
-
-        res.status(200).json({
-            status: 'success',
-            task
-        });
-
-    } catch (error) {
-        res.status(404).json({
-            message: error.message,
-        });
+    if (!task) {
+        throw new Error(`No task found with ID: ${id}`);
     }
+
+    res.status(200).json({
+        status: 'success',
+        task
+    });
 }
 
 const deleteTask = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const task = await Task.findByIdAndDelete(id);
-        if (!task) {
-            throw new Error(`No task found with ID: ${id}`);
-        }
-        res.status(200).json({
-            status: 'success',
-            message: 'Task deleted successfully'
-        });
-    } catch (err) {
-        res.status(404).json({
-            message: err.message,
-        });
+    const { id } = req.params;
+    const task = await Task.findByIdAndDelete(id);
+    if (!task) {
+        throw new Error(`No task found with ID: ${id}`);
     }
+    res.status(200).json({
+        status: 'success',
+        message: 'Task deleted successfully'
+    });
 }
 
 module.exports = {
