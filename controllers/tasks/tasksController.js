@@ -15,24 +15,18 @@ const getAllTasks = async (_, res) => {
 }
 
 const getTaskById = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const task = await Task.findById(id)
-        if (!task) {
-            console.error(`No task found with ID: ${id}`);
+    const { id } = req.params;
+    const task = await Task.findById(id)
+    if (!task) {
+        console.error(`No task found with ID: ${id}`);
 
-            throw new NotFoundException(`No task found with ID: ${id}`);
-        }
-        res.status(200).json({
-            status: 'success',
-            task: task
-        });
-    } catch (error) {
-        const taskErr = new Error(error);
-        taskErr.status = 500;
-
-        throw taskErr;
+        throw new NotFoundException(`No task found with ID: ${id}`);
     }
+    res.status(200).json({
+        status: 'success',
+        task: task
+    });
+
 }
 
 const createTask = async (req, res) => {
